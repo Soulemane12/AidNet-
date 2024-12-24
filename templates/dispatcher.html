@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dispatcher Interface</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <style>
+        :root {
+            --primary-color: #0052cc;
+            --secondary-color: #00875a;
+            --danger-color: #de350b;
+            --warning-color: #ff991f;
+            --background-color: #f4f5f7;
+            --card-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            --border-radius: 8px;
+            --spacing-unit: 1rem;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: var(--background-color);
+            color: #172b4d;
+            line-height: 1.6;
+        }
+
+        .navbar {
+            background: white;
+            padding: 1rem 2rem;
+            box-shadow: var(--card-shadow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-brand {
+            color: var(--primary-color);
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .nav-link {
+            color: #2c5282;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: var(--border-radius);
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .nav-link:hover {
+            background: #ebf8ff;
+            color: var(--primary-color);
+        }
+
+        /* Header */
+        .header {
+            background: #007bff;
+            color: white;
+            text-align: center;
+            padding: 1rem;
+        }
+
+        /* Main Container */
+        .main-container {
+            flex: 1;
+            padding: 20px;
+        }
+
+        /* Form Styling */
+        form label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+
+        form input, form textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        form button {
+            padding: 10px 20px;
+            border: none;
+            background: #28a745;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        /* Section Styling */
+        section {
+            background: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        /* Location coordinates display */
+        #location-coordinates {
+            margin: 10px 0;
+            font-size: 0.9rem;
+            color: #555;
+        }
+
+        /* JSON display */
+        #json-display {
+            margin-top: 20px;
+            background: #f9f9f9;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+
+        #json-display pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            background: #007bff;
+            color: white;
+            padding: 10px 0;
+            margin-top: auto;
+        }
+    </style>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-brand">First Responder Network</div>
+    <div class="nav-links">
+        <a href="{{ url_for('dispatcher') }}" class="nav-link">Dispatcher</a>
+        <a href="{{ url_for('responder') }}" class="nav-link">Responder</a>
+    </div>
+</nav>
+    <!-- Header Section -->
+    <header class="header">
+        <h1>Emergency Dispatch Center</h1>
+        <p>Coordinate emergency response and dispatch resources</p>
+    </header>
+
+    <!-- Main Content Container -->
+    <div class="main-container">
+        <!-- Dispatcher Interface Section -->
+        <section id="dispatcher-interface">
+            <h2>Log Emergency</h2>
+            <form id="dispatcher-form">
+                <!-- Location Label and Map -->
+                <label for="location">Location:</label>
+                <div id="map" style="height: 400px; margin-bottom: 10px;"></div>
+                
+                <!-- Hidden Inputs for Latitude and Longitude -->
+                <input type="hidden" id="latitude" name="latitude" required>
+                <input type="hidden" id="longitude" name="longitude" required>
+
+                <!-- Display Current Coordinates -->
+                <div id="location-coordinates">
+                    <p>Latitude: <span id="current-lat">Fetching...</span></p>
+                    <p>Longitude: <span id="current-lon">Fetching...</span></p>
+                </div>
+
+                <!-- Symptoms/Context Textarea -->
+                <label for="symptoms">Symptoms/Context:</label>
+                <textarea id="symptoms" name="symptoms" placeholder="Enter symptoms or context (e.g., cardiac arrest)" required></textarea>
+
+                <!-- Submit Button -->
+                <button type="submit">Send Alert</button>
+            </form>
+
+            <!-- Message Display Area -->
+            <div id="dispatcher-message"></div>
+
+            <!-- Optional: JSON Payload Display for Debugging -->
+            <div id="json-display">
+                <h3>Emergency Data JSON:</h3>
+                <pre id="emergency-json">Awaiting submission...</pre>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer Section -->
+    <footer class="footer">
+        <p>© 2024 Emergency Response Network</p>
+    </footer>
+
+    <!-- Leaflet JS for Interactive Maps -->
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    
+    <!-- Optional: Leaflet Routing Machine JS (if needed in the future) -->
+    <!-- <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.min.js"></script> -->
+    
+    <!-- Dispatcher JavaScript -->
+    <script src="{{ url_for('static', filename='js/dispatcher.js') }}"></script>
+
+    <!-- Additional Inline JavaScript for Displaying Coordinates and JSON Payload -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const currentLatSpan = document.getElementById('current-lat');
+            const currentLonSpan = document.getElementById('current-lon');
+            const emergencyJsonPre = document.getElementById('emergency-json');
+
+            // Function to update the displayed coordinates
+            function updateDisplayedCoordinates() {
+                const lat = document.getElementById('latitude').value;
+                const lon = document.getElementById('longitude').value;
+                currentLatSpan.textContent = lat || 'Fetching...';
+                currentLonSpan.textContent = lon || 'Fetching...';
+            }
+
+            // MutationObserver to watch for changes in the hidden latitude and longitude inputs
+            const observerConfig = { attributes: true, childList: true, subtree: true };
+            const latObserver = new MutationObserver(updateDisplayedCoordinates);
+            const lonObserver = new MutationObserver(updateDisplayedCoordinates);
+
+            latObserver.observe(document.getElementById('latitude'), observerConfig);
+            lonObserver.observe(document.getElementById('longitude'), observerConfig);
+
+            // Override the fetch function to display the JSON payload in the #json-display section
+            const originalFetch = window.fetch;
+            window.fetch = function() {
+                const args = arguments;
+                if (args[1] && args[1].body) {
+                    try {
+                        const body = JSON.parse(args[1].body);
+                        emergencyJsonPre.textContent = JSON.stringify(body, null, 2);
+                    } catch (e) {
+                        emergencyJsonPre.textContent = 'Invalid JSON payload.';
+                    }
+                }
+                return originalFetch.apply(this, arguments);
+            };
+        });
+    </script>
+</body>
+</html>

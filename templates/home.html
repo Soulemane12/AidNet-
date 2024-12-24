@@ -1,0 +1,211 @@
+<!-- home.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emergency Response Network</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --secondary: #059669;
+            --secondary-dark: #047857;
+            --danger: #dc2626;
+            --warning: #d97706;
+            --background: #f8fafc;
+            --text: #1e293b;
+            --border-radius: 8px;
+            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            --transition: all 0.2s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: var(--background);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .navbar {
+            background: white;
+            padding: 1rem 2rem;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .nav-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-brand {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: var(--text);
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+        }
+
+        .nav-link:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            opacity: 0.9;
+        }
+
+        .interface-cards {
+            max-width: 1200px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .interface-card {
+            background: white;
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            text-align: center;
+            transition: var(--transition);
+        }
+
+        .interface-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 12px -2px rgb(0 0 0 / 0.15);
+        }
+
+        .interface-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .interface-description {
+            color: #64748b;
+            margin-bottom: 1.5rem;
+        }
+
+        .interface-button {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            border-radius: var(--border-radius);
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .interface-button:hover {
+            background: var(--primary-dark);
+        }
+
+        .dispatcher-button {
+            background: var(--secondary);
+        }
+
+        .dispatcher-button:hover {
+            background: var(--secondary-dark);
+        }
+
+        .footer {
+            margin-top: auto;
+            background: var(--primary-dark);
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .interface-cards {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-content">
+            <a href="/" class="nav-brand">Emergency Response</a>
+            <div class="nav-links">
+                <a href="/dispatcher" class="nav-link">Dispatcher</a>
+                <a href="/responder" class="nav-link">Responder</a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <h1>Emergency Response Network</h1>
+        <p>Coordinated response for better outcomes</p>
+    </section>
+
+    <main class="interface-cards">
+        <div class="interface-card">
+            <h2 class="interface-title">Dispatcher Portal</h2>
+            <p class="interface-description">Log and manage emergency calls, coordinate responses, and track resources in real-time.</p>
+            <a href="/dispatcher" class="interface-button dispatcher-button">Enter Dispatcher Portal</a>
+        </div>
+
+        <div class="interface-card">
+            <h2 class="interface-title">Responder Hub</h2>
+            <p class="interface-description">Access emergency details, navigate to locations, and manage response status updates.</p>
+            <a href="/responder" class="interface-button">Enter Responder Hub</a>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2024 Emergency Response Network | 24/7 Emergency Services</p>
+    </footer>
+</body>
+</html>
